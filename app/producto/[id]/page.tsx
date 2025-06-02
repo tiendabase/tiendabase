@@ -1,9 +1,10 @@
 import { notFound } from "next/navigation"
 import Cliente from "./cliente";
+import { prisma } from "@/lib/prisma";
 import Navbar from "@/app/componentes/navbar";
 import Footer from "@/app/componentes/footer";
 const getProducto = async (id: string) => {
-    return await prisma?.producto.findFirst({
+    return await prisma.producto.findFirst({
         where: {
             OR: [{ id }, { url: id }]
         },
@@ -27,7 +28,6 @@ export async function generateMetadata(
 export default async function Producto({ params }: any) {
 
     const producto = await getProducto((await params).id)
-    console.log(producto)
     return <>
         <Navbar />
         <Cliente producto={producto as any} />
