@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
-
+import { prisma } from "@/lib/prisma";
 const GET = async (request: NextRequest) => {
-    const productos = await prisma?.producto.findMany({
+    const productos = await prisma.producto.findMany({
         include: {
             variantes: {
                 orderBy: { id: "asc" }

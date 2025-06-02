@@ -1,6 +1,7 @@
 // app/api/tu-endpoint/route.ts
 import { Producto, Variante } from "@prisma/client";
 import { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
 
 export const POST = async (request: NextRequest) => {
   try {

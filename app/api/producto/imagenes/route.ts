@@ -1,7 +1,7 @@
 // app/api/tu-endpoint/route.ts
 import { supabase } from "@/lib/supabase";
-import { Producto, Variante } from "@prisma/client";
 import { NextRequest } from "next/server";
+import { prisma } from "@/lib/prisma";
 
 export const POST = async (request: NextRequest) => {
     try {
@@ -28,7 +28,7 @@ export const POST = async (request: NextRequest) => {
                 return {
                     url: urlData.publicUrl,
                     orden: index,
-                    productoId,
+                    productoId: productoId!,
                 };
             })
         );
