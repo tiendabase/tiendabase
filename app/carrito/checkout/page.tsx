@@ -530,9 +530,9 @@ const CheckoutPage = () => {
                 <div className="container mx-auto px-4 py-8">
                     {/* Progress Steps */}
                     <div className="mb-8">
-                        <div className="flex items-center justify-center space-x-4 mb-6">
-                            {steps.map((step, index) => (
-                                <div key={step.id} className="flex items-center">
+                        <div className="flex items-center justify-center space-x-8 mb-6">
+                            {steps.map((step) => (
+                                <div key={step.id} className="flex flex-col items-center">
                                     <div
                                         className={`w-8 h-8 rounded-full flex items-center justify-center flex-wrap transition-all ${currentStep >= step.id ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
                                             }`}
@@ -540,7 +540,7 @@ const CheckoutPage = () => {
                                         <step.icon className="w-5 h-5" />
                                     </div>
                                     <span
-                                        className={`ml-2 text-sm font-medium ${currentStep >= step.id ? "text-foreground" : "text-muted-foreground"
+                                        className={`text-sm font-medium ${currentStep >= step.id ? "text-primary mt-2" : "text-muted-foreground"
                                             }`}
                                     >
                                         {step.title}

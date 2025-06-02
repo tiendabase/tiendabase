@@ -82,8 +82,6 @@ const Hero = () => {
         {
             id: 1,
             image: "/images/slide-1.jpg",
-            badge: "Oferta Especial",
-            badgeColor: "bg-red-500",
             title: "Rebajas de Verano",
             subtitle: "Hasta 70% de descuento",
             description: "Descubre las últimas tendencias con precios increíbles",
@@ -95,8 +93,6 @@ const Hero = () => {
         {
             id: 2,
             image: "/images/slide-2.jpg",
-            badge: "Nueva Colección",
-            badgeColor: "bg-green-500",
             title: "Estilo Urbano",
             subtitle: "Convierte tu look en una declaración",
             description: "Prendas únicas para personalidades auténticas",
@@ -154,23 +150,13 @@ const Hero = () => {
                                 <div className="relative h-full flex items-center">
                                     <div className="container mx-auto px-6 md:px-12 lg:px-20">
                                         <div className="max-w-2xl">
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 30 }}
-                                                animate={{ opacity: 1, y: 0 }}
-                                                transition={{ delay: 0.2 }}
-                                                className="mb-4"
-                                            >
-                                                <Badge className={`${slide.badgeColor} text-white mb-4`}>
-                                                    <Sparkles className="w-3 h-3 mr-1" />
-                                                    {slide.badge}
-                                                </Badge>
-                                            </motion.div>
+                                        
 
                                             <motion.h1
                                                 initial={{ opacity: 0, y: 30 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.3 }}
-                                                className="text-white text-4xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
+                                                className="text-white text2xl md:text-6xl lg:text-7xl font-bold mb-4 leading-tight"
                                             >
                                                 {slide.title}
                                             </motion.h1>
@@ -188,7 +174,7 @@ const Hero = () => {
                                                 initial={{ opacity: 0, y: 30 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.5 }}
-                                                className="text-white/80 text-lg mb-8 max-w-lg"
+                                                className="text-white/80 md:text-lg mb-8 max-w-lg"
                                             >
                                                 {slide.description}
                                             </motion.p>
@@ -228,14 +214,13 @@ const Hero = () => {
                                                 className="flex flex-col sm:flex-row gap-4"
                                             >
                                                 <Link href="/productos">
-                                                    <Button size="lg" className="group bg-white text-foreground hover:bg-white/90">
+                                                    <Button  className="group bg-white text-foreground hover:bg-white/90">
                                                         <ArrowRight className="w-5 h-5 mr-2 group-hover:translate-x-1 transition-transform" />
                                                         {slide.cta}
                                                     </Button>
                                                 </Link>
                                                 <Link href="/catalogo">
                                                     <Button
-                                                        size="lg"
                                                         variant="outline"
                                                         className="borde hover:bg-white hover:text-foreground"
                                                     >
@@ -273,17 +258,6 @@ const Hero = () => {
                     <CarouselNext className="relative inset-auto bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white hover:text-foreground" />
                 </div>
 
-                {/* Indicadores de progreso */}
-                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex space-x-2">
-                    {slides.map((_, index) => (
-                        <button
-                            key={index}
-                            className={`w-3 h-3 rounded-full transition-all ${current === index + 1 ? "bg-white scale-125" : "bg-white/50 hover:bg-white/75"
-                                }`}
-                            onClick={() => api?.scrollTo(index)}
-                        />
-                    ))}
-                </div>
             </Carousel>
 
 

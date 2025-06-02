@@ -128,13 +128,13 @@ const Navbar = () => {
                     : "bg-transparent"
                     }`}
             >
-                <div className="container mx-auto px-4">
+                <div className="container mx-auto">
                     <div className="flex items-center justify-between h-16 md:h-20">
                         {/* Logo */}
                         <Link href="/" className="flex items-center space-x-2">
                             <motion.div
                                 whileHover={{ scale: 1.05 }}
-                                className={`text-2xl font-bold ${isScrolled || !isHomePage ? "text-foreground" : "text-white"}`}
+                                className={`lg:text-xl font-bold ${isScrolled || !isHomePage ? "text-foreground" : "text-white"}`}
                             >
                                 <span className="text-primary">E</span>-Shop
                             </motion.div>
@@ -236,56 +236,7 @@ const Navbar = () => {
                                     </Link>
                                 </Button>
 
-                                {/* Preview del carrito */}
-                                <AnimatePresence>
-                                    {isCartPreviewOpen && cartItems.length > 0 && (
-                                        <motion.div
-                                            initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                                            animate={{ opacity: 1, y: 0, scale: 1 }}
-                                            exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                                            className="absolute top-full right-0 w-80 mt-2"
-                                            onMouseEnter={() => setIsCartPreviewOpen(true)}
-                                            onMouseLeave={() => setIsCartPreviewOpen(false)}
-                                        >
-                                            <Card className="shadow-xl border-0">
-                                                <CardContent className="p-4">
-                                                    <h3 className="font-semibold mb-3">Carrito de Compras</h3>
-                                                    <div className="space-y-3 max-h-60 overflow-y-auto">
-                                                        {cartItems.slice(0, 3).map((item) => (
-                                                            <div key={item.id} className="flex items-center space-x-3">
-                                                                <Image
-                                                                    className="aspect-square object-cover w-12 h-12 rounded" src={item.thumb} width={100} height={100}
-                                                                    alt="item" />
-                                                                <div className="flex-1">
-                                                                    <p className="text-sm font-medium line-clamp-1">{item.name}</p>
-                                                                    <p className="text-xs text-muted-foreground">
-                                                                        ${item.price.toLocaleString()} x {item.count}
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                    {cartItems.length > 3 && (
-                                                        <p className="text-xs text-muted-foreground mt-2">+{cartItems.length - 3} productos más</p>
-                                                    )}
-                                                    <Separator className="my-3" />
-                                                    <div className="flex justify-between items-center mb-3">
-                                                        <span className="font-semibold">Total:</span>
-                                                        <span className="font-bold text-primary">
-                                                            $
-                                                            {cartItems
-                                                                .reduce((total, item) => total + item.price * item.count, 0)
-                                                                .toLocaleString()}
-                                                        </span>
-                                                    </div>
-                                                    <Button className="w-full" asChild>
-                                                        <Link href="/carrito">Ver Carrito</Link>
-                                                    </Button>
-                                                </CardContent>
-                                            </Card>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
+                               
                             </div>
 
 

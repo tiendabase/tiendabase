@@ -151,28 +151,27 @@ const ProductView = ({ producto }: ProductViewProps) => {
           <ChevronRight className="w-4 h-4" />
           <span className="text-foreground">{producto.titulo}</span>
         </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="outline" size="sm" onClick={shareProduct}>
-            <Share2 className="size-4" />
-          </Button>
-          <Badge variant="secondary" className="flex items-center space-x-1">
-            <Eye className="w-3 h-3" />
-            <span>{viewCount} vistas</span>
-          </Badge>
-        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-8">
         {/* Columna izquierda - Información del producto */}
         <div className="space-y-6">
           {/* Badges y estado */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-4">
             <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">En venta</Badge>
             {producto.descontable && (
               <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100">
                 -{getDiscountPercentage()}%
               </Badge>
             )}
+            <Badge variant="secondary" className="flex items-center space-x-1">
+              <Eye className="w-3 h-3" />
+              <span>{viewCount} vistas</span>
+            </Badge>
+            <Button variant="outline" size="sm" onClick={shareProduct}>
+              <Share2 className="size-4" />
+            </Button>
+
           </div>
 
           {/* Título y rating */}
@@ -185,9 +184,8 @@ const ProductView = ({ producto }: ProductViewProps) => {
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${
-                      i < Math.floor(productStats.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                    }`}
+                    className={`w-4 h-4 ${i < Math.floor(productStats.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      }`}
                   />
                 ))}
                 <span className="text-sm font-medium">{productStats.rating}</span>
@@ -458,7 +456,7 @@ const ProductView = ({ producto }: ProductViewProps) => {
           <TabsTrigger value="care">Cuidados</TabsTrigger>
         </TabsList>
 
-      
+
 
         <TabsContent value="specifications" className="mt-6">
           <Card>

@@ -121,7 +121,7 @@ const ProductGallery = ({ imagenes }: GalleryProps) => {
   }
 
   return (
-    <div className="space-y-4 w-5/6 mx-auto md:w-full">
+    <div className="space-y-4 w-full mx-auto md:w-full">
       {/* Imagen principal */}
       <div className="relative group">
         <div
