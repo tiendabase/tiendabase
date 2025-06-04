@@ -167,7 +167,7 @@ const Footer = () => {
       <div className="bg-secondary py-4">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-muted-foreground text-sm">Diseñado por Miguel Huayhua - 2025</p>
+            <p className="text-muted-foreground text-sm">Diseñado por Grupo Devs  M&E - 2025</p>
             <div className="flex space-x-6 mt-2 md:mt-0">
               <Link
                 href="#"

@@ -121,148 +121,150 @@ const ProductGallery = ({ imagenes }: GalleryProps) => {
   }
 
   return (
-    <div className="space-y-4 w-full mx-auto md:w-full">
+    <div className="space-y-4 mb-5 w-full mx-auto md:w-full ">
       {/* Imagen principal */}
-      <div className="relative group">
-        <div
-          ref={imageRef}
-          className="relative aspect-square overflow-hidden rounded-lg bg-muted cursor-zoom-in"
-          onMouseMove={handleMouseMove}
-          onMouseEnter={() => setIsHovering(true)}
-          onMouseLeave={() => setIsHovering(false)}
-          onClick={handleImageClick}
-        >
-          <Image
-            src={mainImage.url || "/placeholder.svg"}
-            alt={mainImage.productoId || `Imagen ${selectedIndex + 1}`}
-            fill
-            className={`object-cover transition-transform duration-300 ${isZoomed ? "cursor-zoom-out" : "cursor-zoom-in"
-              }`}
-            style={{
-              transform: `scale(${zoomLevel}) rotate(${rotation}deg)`,
-              transformOrigin: isZoomed ? `${mousePosition.x}% ${mousePosition.y}%` : "center",
-            }}
-            priority={selectedIndex === 0}
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          />
-
-          {/* Overlay con controles */}
+      <div className="md:sticky md:top-25  ">
+        <div className="relative group ">
           <div
-            className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${isHovering ? "opacity-100" : "opacity-0"
-              }`}
+            ref={imageRef}
+            className="relative aspect-square overflow-hidden rounded-lg bg-muted cursor-zoom-in"
+            onMouseMove={handleMouseMove}
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+            onClick={handleImageClick}
           >
-            {/* Navegación */}
-            {sortedImages.length > 1 && (
-              <>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="absolute left-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    goToPrevious()
-                  }}
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </Button>
-                <Button
-                  variant="secondary"
-                  size="icon"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    goToNext()
-                  }}
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </>
-            )}
+            <Image
+              src={mainImage.url || "/placeholder.svg"}
+              alt={mainImage.productoId || `Imagen ${selectedIndex + 1}`}
+              fill
+              className={`object-cover transition-transform duration-300 ${isZoomed ? "cursor-zoom-out" : "cursor-zoom-in"
+                }`}
+              style={{
+                transform: `scale(${zoomLevel}) rotate(${rotation}deg)`,
+                transformOrigin: isZoomed ? `${mousePosition.x}% ${mousePosition.y}%` : "center",
+              }}
+              priority={selectedIndex === 0}
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            />
 
-            {/* Controles superiores */}
-            <div className="absolute top-2 right-2 flex space-x-1">
-              <Button
-                variant="secondary"
-                size="icon"
-                className="opacity-80 hover:opacity-100"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setIsLightboxOpen(true)
-                }}
-              >
-                <Maximize2 className="w-4 h-4" />
-              </Button>
-             
+            {/* Overlay con controles */}
+            <div
+              className={`absolute inset-0 bg-black/20 transition-opacity duration-300 ${isHovering ? "opacity-100" : "opacity-0"
+                }`}
+            >
+              {/* Navegación */}
+              {sortedImages.length > 1 && (
+                <>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      goToPrevious()
+                    }}
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 opacity-50 hover:opacity-100"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      goToNext()
+                    }}
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </Button>
+                </>
+              )}
+
+              {/* Controles superiores */}
+              <div className="absolute top-2 right-2 flex space-x-1">
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="opacity-80 hover:opacity-100"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setIsLightboxOpen(true)
+                  }}
+                >
+                  <Maximize2 className="w-4 h-4" />
+                </Button>
+
+              </div>
+
+              {/* Indicador de zoom */}
+              {isZoomed && (
+                <div className="absolute bottom-2 left-2">
+                  <Badge variant="secondary" className="opacity-80">
+                    {Math.round(zoomLevel * 100)}%
+                  </Badge>
+                </div>
+              )}
             </div>
 
-            {/* Indicador de zoom */}
-            {isZoomed && (
-              <div className="absolute bottom-2 left-2">
+            {/* Indicador de imagen actual */}
+            {sortedImages.length > 1 && (
+              <div className="absolute bottom-2 right-2">
                 <Badge variant="secondary" className="opacity-80">
-                  {Math.round(zoomLevel * 100)}%
+                  {selectedIndex + 1} / {sortedImages.length}
                 </Badge>
               </div>
             )}
           </div>
-
-          {/* Indicador de imagen actual */}
-          {sortedImages.length > 1 && (
-            <div className="absolute bottom-2 right-2">
-              <Badge variant="secondary" className="opacity-80">
-                {selectedIndex + 1} / {sortedImages.length}
-              </Badge>
-            </div>
-          )}
         </div>
-      </div>
 
-      {/* Thumbnails */}
-      {sortedImages.length > 1 && (
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <h3 className="text-sm font-medium text-muted-foreground">Más vistas</h3>
-            <div className="flex space-x-1">
-              <Button variant="outline" size="sm" onClick={goToPrevious} disabled={selectedIndex === 0}>
-                <ChevronLeft className="w-3 h-3" />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={goToNext}
-                disabled={selectedIndex === sortedImages.length - 1}
-              >
-                <ChevronRight className="w-3 h-3" />
-              </Button>
+        {/* Thumbnails */}
+        {sortedImages.length > 1 && (
+          <div className="space-y-2 mt-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-medium text-muted-foreground">Más vistas</h3>
+              <div className="flex space-x-1">
+                <Button variant="outline" size="sm" onClick={goToPrevious} disabled={selectedIndex === 0}>
+                  <ChevronLeft className="w-3 h-3" />
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={goToNext}
+                  disabled={selectedIndex === sortedImages.length - 1}
+                >
+                  <ChevronRight className="w-3 h-3" />
+                </Button>
+              </div>
             </div>
-          </div>
 
-          <div className="flex space-x-2 overflow-x-auto pb-2">
-            {sortedImages.map((imagen, index) => (
-              <button
-                key={imagen.id}
-                className={`relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all duration-200 ${index === selectedIndex
+            <div className="flex space-x-2 overflow-x-auto pb-2">
+              {sortedImages.map((imagen, index) => (
+                <button
+                  key={imagen.id}
+                  className={`relative flex-shrink-0 w-16 h-16 rounded-md overflow-hidden border-2 transition-all duration-200 ${index === selectedIndex
                     ? "border-primary ring-2 ring-primary/20"
                     : "border-border hover:border-primary/50"
-                  }`}
-                onClick={() => {
-                  setSelectedIndex(index)
-                  resetZoom()
-                }}
-              >
-                <Image
-                  src={imagen.url || "/placeholder.svg"}
-                  alt={imagen.productoId || `Thumbnail ${index + 1}`}
-                  fill
-                  className="object-cover"
-                  sizes="64px"
-                />
-                {index === selectedIndex && <div className="absolute inset-0 bg-primary/10" />}
-              </button>
-            ))}
+                    }`}
+                  onClick={() => {
+                    setSelectedIndex(index)
+                    resetZoom()
+                  }}
+                >
+                  <Image
+                    src={imagen.url || "/placeholder.svg"}
+                    alt={imagen.productoId || `Thumbnail ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                  />
+                  {index === selectedIndex && <div className="absolute inset-0 bg-primary/10" />}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
+      </div>
       {/* Lightbox Modal */}
       <Dialog open={isLightboxOpen} onOpenChange={setIsLightboxOpen}>
         <DialogContent className="max-w-7xl w-[98%] h-[90vh] p-0">
@@ -282,7 +284,7 @@ const ProductGallery = ({ imagenes }: GalleryProps) => {
                 <Button variant="outline" size="sm" onClick={handleRotate}>
                   <RotateCw className="w-4 h-4" />
                 </Button>
-                
+
                 <Button variant="outline" size="sm" onClick={resetZoom}>
                   Reset
                 </Button>

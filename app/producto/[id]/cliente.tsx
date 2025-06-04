@@ -16,22 +16,17 @@ import { Button } from "@/components/ui/button";
 
 
 const Cliente = ({ producto }: { producto: Producto & { imagenes: Imagen[], variantes: Variante[] } }) => {
-  
+
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
-    const { data, error } = useSwr<(Producto & { imagenes: Imagen[], variantes: Variante[] })[]>("/api/producto/mostrar", fetcher);
+    const { data } = useSwr<(Producto & { imagenes: Imagen[], variantes: Variante[] })[]>("/api/producto/mostrar", fetcher);
 
     return (
         <div className="mt-25 mb-10 px-5 sm:px-30 md:px-10 lg:px-25 xl:px-60">
-            <Breadcrumb />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-10 lg:gap-20 xl:gap-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-10 lg:gap-20">
 
-                <div>
-                    <Gallery imagenes={producto.imagenes} />
-                    <p className="text-muted-foreground mt-4 leading-relaxed">
-                        {producto.subtitulo || "Descripción detallada del producto aquí..."}
-                    </p>
-                </div>
+                <Gallery imagenes={producto.imagenes} />
+
                 <Content producto={producto} />
             </div>
 

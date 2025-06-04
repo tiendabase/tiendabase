@@ -26,7 +26,6 @@ import { tallasAlfabeticas, tallasNumericas } from "@/lib/utils";
 
 
 const ProductsFilter = () => {
-  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const addQueryParams = () => {
     // query params changes
@@ -105,13 +104,12 @@ const ProductsFilter = () => {
       <Sheet >
 
         <SheetContent >
-          <SheetHeader>
+          <SheetHeader className="mb-4">
             <SheetTitle>Filtros</SheetTitle>
 
           </SheetHeader>
-          <div className="px-6">
-            <FilterForm />
-          </div>
+
+          <FilterForm />
 
         </SheetContent>
 
@@ -120,7 +118,7 @@ const ProductsFilter = () => {
           <Button
             variant="ghost"
             type="button"
-            className={`flex text-xs  sticky top-16 z-50 border-y rounded-none md:hidden w-full`}
+            className={`flex text-xs bg-background  sticky top-16 z-10 border-y rounded-none md:hidden w-full`}
           >
             Agregar filtro <ChevronRight className="size-4" />
           </Button>

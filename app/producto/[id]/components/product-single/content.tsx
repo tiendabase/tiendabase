@@ -50,6 +50,7 @@ import {
   Info,
   Package,
   Check,
+  X,
 } from "lucide-react"
 import { Label } from "@/components/ui/label"
 
@@ -61,12 +62,12 @@ interface ProductViewProps {
 }
 
 const ProductView = ({ producto }: ProductViewProps) => {
+  console.log(producto)
   const dispatch = useDispatch()
   const [count, setCount] = useState<number>(1)
-  const [selectedVariant, setSelectedVariant] = useState<string>("")
+
   const [itemSize, setItemSize] = useState<string>("")
   const [isAddingToCart, setIsAddingToCart] = useState(false)
-  const [showSizeGuide, setShowSizeGuide] = useState(false)
   const [viewCount, setViewCount] = useState(127)
   const [stockLevel, setStockLevel] = useState(8)
 
@@ -112,7 +113,7 @@ const ProductView = ({ producto }: ProductViewProps) => {
       thumb: producto.imagenes?.[0]?.url || "",
       price: getSelectedPrice(),
       count,
-      color: selectedVariant,
+      color: selectedVariant?.codigoHexColor!,
       size: itemSize,
     }
 
@@ -141,9 +142,97 @@ const ProductView = ({ producto }: ProductViewProps) => {
       })
     }
   }
+  const [selectedSize, setSelectedSize] = useState<string>("")
+  const [selectedColor, setSelectedColor] = useState<string>("")
+
+  const [isChecking, setIsChecking] = useState(false)
+
+  // Filtrar variantes activas
+  const activeVariants = producto.variantes.filter((v) => v.estado)
+
+  // Encontrar la variante por defecto (sin talla ni color)
+  const defaultVariant = activeVariants.find((v) => v.tipo === "POR_DEFECTO")
+  const [selectedVariant, setSelectedVariant] = useState<Variante | null>(null)
+  // Obtener tallas únicas (excluyendo la por defecto)
+  const availableSizes = activeVariants
+    .filter((v) => v.talla)
+    .reduce((acc, v) => {
+      if (!acc.find((item) => item.talla === v.talla)) {
+        acc.push(v)
+      }
+      return acc
+    }, [] as Variante[])
+    .sort((a, b) => {
+      const sizeOrder = ["XS", "S", "M", "L", "XL", "XXL"]
+      const aIndex = sizeOrder.indexOf(a.talla || "")
+      const bIndex = sizeOrder.indexOf(b.talla || "")
+      if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex
+      return (a.talla || "").localeCompare(b.talla || "")
+    })
+
+  // Obtener colores únicos (excluyendo la por defecto)
+  const availableColors = activeVariants
+    .filter((v) => v.codigoHexColor)
+    .reduce((acc, v) => {
+      if (!acc.find((item) => item.codigoHexColor === v.codigoHexColor)) {
+        acc.push(v)
+      }
+      return acc
+    }, [] as Variante[])
+
+  // Función para consultar disponibilidad de variante
+  const checkVariantAvailability = async (size?: string, color?: string) => {
+    setIsChecking(true)
+
+    // Simular consulta a API
+    await new Promise((resolve) => setTimeout(resolve, 300))
+
+    // Si no hay selecciones, usar la variante por defecto
+    if (!size && !color) {
+      setSelectedVariant(defaultVariant || null)
+      setIsChecking(false)
+      return
+    }
+
+    // Buscar variante que coincida exactamente con los criterios
+    const variant = activeVariants.find((v) => {
+      const sizeMatch = size ? v.talla === size : !v.talla
+      const colorMatch = color ? v.codigoHexColor === color : !v.codigoHexColor
+      return sizeMatch && colorMatch
+    })
+
+    setSelectedVariant(variant || null)
+    setIsChecking(false)
+  }
+
+  // Inicializar con la variante por defecto
+  useEffect(() => {
+    if (defaultVariant) {
+      setSelectedVariant(defaultVariant)
+    }
+  }, [])
+
+  // Efecto para verificar disponibilidad cuando cambian las selecciones
+  useEffect(() => {
+    checkVariantAvailability(selectedSize || undefined, selectedColor || undefined)
+  }, [selectedSize, selectedColor])
+
+  const handleSizeChange = (value: string) => {
+    setSelectedSize(value === "clear" ? "" : value)
+  }
+
+  const handleColorChange = (value: string) => {
+    setSelectedColor(value === "clear" ? "" : value)
+  }
+
+
+  const hasSizes = availableSizes.length > 0
+  const hasColors = availableColors.length > 0
+  const hasSelections = selectedSize || selectedColor
+
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8">
+    <div className="max-w-7xl mx-auto space-y-8 relative">
       {/* Header con breadcrumb y acciones rápidas */}
       <div className="flex items-center justify-between">
         <div className="flex items-center  text-sm text-muted-foreground">
@@ -160,7 +249,6 @@ const ProductView = ({ producto }: ProductViewProps) => {
         <div className="space-y-6">
           {/* Badges y estado */}
           <div className="flex items-center space-x-4">
-            <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">En venta</Badge>
             {producto.descontable && (
               <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100">
                 -{getDiscountPercentage()}%
@@ -170,7 +258,7 @@ const ProductView = ({ producto }: ProductViewProps) => {
               <Eye className="w-3 h-3" />
               <span>{viewCount} vistas</span>
             </Badge>
-            <Button variant="outline" size="sm" onClick={shareProduct}>
+            <Button variant="ghost" className="absolute -top-2 right-0" onClick={shareProduct}>
               <Share2 className="size-4" />
             </Button>
 
@@ -199,18 +287,22 @@ const ProductView = ({ producto }: ProductViewProps) => {
 
           {/* Precio */}
           <div className="space-y-2">
-            {producto.descontable ? (
-              <div className="flex items-center space-x-3">
-                <span className="text-3xl font-bold text-primary">
-                  ${(getSelectedPrice() * 0.8).toLocaleString()} ARS
-                </span>
-                <span className="text-xl text-muted-foreground line-through">
-                  ${getSelectedPrice().toLocaleString()} ARS
-                </span>
-              </div>
-            ) : (
-              <span className="text-3xl font-bold">${getSelectedPrice().toLocaleString()} ARS</span>
-            )}
+            {
+              selectedVariant && (
+                producto.descontable ? (
+                  <div className="flex items-center space-x-3">
+                    <span className="text-3xl font-bold text-primary">
+                      ${(getSelectedPrice() * 0.8).toLocaleString()} ARS
+                    </span>
+                    <span className="text-xl text-muted-foreground line-through">
+                      ${getSelectedPrice().toLocaleString()} ARS
+                    </span>
+                  </div>
+                ) : (
+                  <span className="text-3xl font-bold">{selectedVariant!.precio.toFixed(2)} ARS</span>
+                )
+              )
+            }
 
             {/* Programa de puntos */}
             <div className="flex items-center space-x-2 text-sm">
@@ -218,37 +310,178 @@ const ProductView = ({ producto }: ProductViewProps) => {
               <span>Gana {Math.floor(getSelectedPrice() / 100)} puntos con esta compra</span>
             </div>
           </div>
+
+          <div>
+            <h3 className="font-semibold mb-2">Cantidad</h3>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center border rounded-full">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  onClick={() => setCount(Math.max(1, count - 1))}
+                  disabled={count <= 1}
+                >
+                  <Minus className="w-4 h-4" />
+                </Button>
+                <span className="px-4 font-semibold">{count}</span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="rounded-full"
+                  onClick={() => setCount(count + 1)}
+                  disabled={count >= stockLevel}
+                >
+                  <Plus className="w-4 h-4" />
+                </Button>
+              </div>
+
+              <div className="text-sm text-muted-foreground">Stock disponible: {stockLevel}</div>
+            </div>
+          </div>
+          {/* Selector de Tallas */}
+          {hasSizes && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="size-select">Talla</Label>
+                {selectedSize && (
+                  <Button variant="ghost" size="sm" onClick={() => setSelectedSize("")} className="h-6 px-2 text-xs">
+                    <X className="w-3 h-3 mr-1" />
+                    Limpiar
+                  </Button>
+                )}
+              </div>
+              <Select value={selectedSize} onValueChange={handleSizeChange}>
+                <SelectTrigger className="w-full" id="size-select">
+                  <SelectValue placeholder="Selecciona una talla" />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedSize && (
+                    <SelectItem value="clear" className="text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <X className="w-3 h-3" />
+                        Limpiar selección
+                      </div>
+                    </SelectItem>
+                  )}
+                  {availableSizes.map((variant) => (
+                    <SelectItem key={`size-${variant.id}`} value={variant.talla || ""}>
+                      Talla {variant.talla}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Selector de Colores */}
+          {hasColors && (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="color-select">Color</Label>
+                {selectedColor && (
+                  <Button variant="ghost" size="sm" onClick={() => setSelectedColor("")} className="h-6 px-2 text-xs">
+                    <X className="w-3 h-3 mr-1" />
+                    Limpiar
+                  </Button>
+                )}
+              </div>
+              <Select value={selectedColor} onValueChange={handleColorChange}>
+                <SelectTrigger id="color-select" className="w-full">
+                  <SelectValue placeholder="Selecciona un color" />
+                </SelectTrigger>
+                <SelectContent>
+                  {selectedColor && (
+                    <SelectItem value="clear" className="text-muted-foreground">
+                      <div className="flex items-center gap-2">
+                        <X className="w-3 h-3" />
+                        Limpiar selección
+                      </div>
+                    </SelectItem>
+                  )}
+                  {availableColors.map((variant) => (
+                    <SelectItem key={`color-${variant.id}`} value={variant.codigoHexColor || ""}>
+                      <div className="flex items-center gap-2">
+                        <div
+                          className="w-4 h-4 rounded-full border border-gray-300"
+                          style={{ backgroundColor: variant.codigoHexColor || undefined }}
+                        />
+                        <span>{variant.titulo}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
+          {/* Estado de verificación */}
+          {isChecking && (
+            <div className="p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                Verificando disponibilidad...
+              </div>
+            </div>
+          )}
+
+          {/* Variante seleccionada */}
+          {!isChecking && selectedVariant && (
+            <div className="p-3 bg-green-50 border border-green-200 rounded-lg space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-medium text-green-800">{selectedVariant.titulo}</span>
+                <Badge variant="default">{selectedVariant.precio.toFixed(2)} ARS</Badge>
+              </div>
+              <div className="text-sm text-green-700">
+                {selectedSize && <p>Talla: {selectedSize}</p>}
+                {selectedColor && (
+                  <div className="flex items-center gap-2 mt-1">
+                    <span>Color:</span>
+                    <div
+                      className="w-3 h-3 rounded-full border border-gray-300"
+                      style={{ backgroundColor: selectedColor }}
+                    />
+                  </div>
+                )}
+                {!hasSelections && (
+                  <Badge variant="outline" className="bg-green-100 text-green-800">
+                    Opción por defecto
+                  </Badge>
+                )}
+              </div>
+            </div>
+          )}
+
+
+          {/* No disponible */}
+          {!isChecking && hasSelections && !selectedVariant && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+              <div className="space-y-2">
+                <div className="text-sm text-red-800">
+                  <div className="flex items-center gap-4">
+                    {selectedSize && <span>Talla: {selectedSize}</span>}
+                    {selectedColor && (
+                      <div className="flex items-center gap-1">
+                        <span>Color:</span>
+                        <div
+                          className="w-3 h-3 rounded-full border border-gray-300"
+                          style={{ backgroundColor: selectedColor }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <Badge variant="destructive">✗ No disponible</Badge>
+                <p className="text-xs text-red-600">Esta combinación no está disponible</p>
+              </div>
+            </div>
+          )}
+
+
           <div>
             {/* Cantidad y acciones */}
             <div className="space-y-4">
-              <div>
-                <h3 className="font-semibold mb-2">Cantidad</h3>
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center border rounded-full">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full"
-                      onClick={() => setCount(Math.max(1, count - 1))}
-                      disabled={count <= 1}
-                    >
-                      <Minus className="w-4 h-4" />
-                    </Button>
-                    <span className="px-4 font-semibold">{count}</span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full"
-                      onClick={() => setCount(count + 1)}
-                      disabled={count >= stockLevel}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </Button>
-                  </div>
 
-                  <div className="text-sm text-muted-foreground">Stock disponible: {stockLevel}</div>
-                </div>
-              </div>
 
               {/* Botones de acción */}
               <div className="flex space-x-3">
@@ -404,28 +637,21 @@ const ProductView = ({ producto }: ProductViewProps) => {
       </div>
 
       {/* Tabs con información detallada */}
-      <Tabs defaultValue="specifications">
+      <Tabs defaultValue="descripcion">
         <TabsList >
-          <TabsTrigger value="specifications">Especificaciones</TabsTrigger>
+          <TabsTrigger value="descripcion">Descripción</TabsTrigger>
           <TabsTrigger value="reviews">Reseñas</TabsTrigger>
           <TabsTrigger value="care">Cuidados</TabsTrigger>
         </TabsList>
 
 
 
-        <TabsContent value="specifications" className="mt-6">
+        <TabsContent value="descripcion" className="mt-6">
           <Card>
-            <CardContent className="py-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold mb-2">Material</h4>
-                  <p className="text-muted-foreground">100% Algodón orgánico</p>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">Origen</h4>
-                  <p className="text-muted-foreground">Fabricado en Argentina</p>
-                </div>
-              </div>
+            <CardContent className="py-3">
+              {
+                producto.descripcion
+              }
             </CardContent>
           </Card>
         </TabsContent>

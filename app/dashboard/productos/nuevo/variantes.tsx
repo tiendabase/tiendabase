@@ -77,16 +77,28 @@ const getColumns = (
         {
             accessorKey: "talla",
             header: "Talla",
-            cell: ({ row }) => (<div>{row.original.talla || "-"}</div>)
+            cell: ({ row }) => (<Controller
+                defaultValue={row.original.titulo}
+                control={control}
+                name={`variantes.${row.index}.talla`}
+                render={({ field }) => (
+                    <div>{field.value || "-"}</div>
+                )}
+            />)
         },
         {
             accessorKey: "codigoHexColor",
             header: "Color",
-            cell: ({ row }) => (
-                <div>
-                    {row.original.codigoHexColor ? <Card className="h-7 w-7 mx-auto rounded-sm" style={{ background: `${row.original.codigoHexColor}` }} /> : "-"}
-                </div>
-            )
+            cell: ({ row }) => (<Controller
+                defaultValue={row.original.titulo}
+                control={control}
+                name={`variantes.${row.index}.codigoHexColor`}
+                render={({ field }) => (
+                    <div>
+                        {row.original.codigoHexColor ? <Card className="h-7 w-7 mx-auto rounded-sm py-0 border-none" style={{ background: `${field.value}` }} /> : "-"}
+                    </div>
+                )}
+            />)
         },
         {
             accessorKey: "precio",

@@ -4,9 +4,9 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 const ProductsContent = () => {
 
   return (
-    <section className="w-full" >
+    <section className="w-full px-3" >
       <div className="flex justify-between items-center gap-4 mb-5">
-        <h2 className="text-xl">
+        <h2 className="text-sm font-semibold md:text-2xl">
           Todos los productos <span className="text-zinc-400">(133)</span>
         </h2>
 
@@ -27,8 +27,8 @@ const ProductsContent = () => {
             </SelectContent>
           </Select>
           <Select>
-            <SelectTrigger className="w-[10em]">
-              <SelectValue placeholder="Ordenar por" />
+            <SelectTrigger className="w-[8em]">
+              <SelectValue placeholder="Ordenar" />
             </SelectTrigger>
             <SelectContent>
               <SelectGroup>

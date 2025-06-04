@@ -101,7 +101,7 @@ const Hero = () => {
                 <CarouselContent>
                     {slides.map((slide, index) => (
                         <CarouselItem key={slide.id}>
-                            <div className="relative h-[500px] md:h-[700px] overflow-hidden">
+                            <div className="relative h-[550px] md:h-[700px] ">
                                 {/* Imagen de fondo */}
                                 <Image
                                     src={slide.image || "/placeholder.svg"}
@@ -157,7 +157,7 @@ const Hero = () => {
                                                 initial={{ opacity: 0, y: 30 }}
                                                 animate={{ opacity: 1, y: 0 }}
                                                 transition={{ delay: 0.4 }}
-                                                className="text-white/90 text-xl md:text-2xl lg:text-3xl font-semibold mb-4"
+                                                className="text-white/90 text-xl md:text-2xl lg:text-3xl font-semibold"
                                             >
                                                 {slide.subtitle}
                                             </motion.h2>

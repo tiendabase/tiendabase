@@ -17,7 +17,6 @@ import type { Imagen, Producto, Variante } from "@prisma/client"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Heart, ShoppingCart, Eye, Star, Truck, Palette, Ruler, TrendingUp, Clock, Package, Loader } from "lucide-react"
 
 interface Props {
@@ -179,10 +178,10 @@ const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, la
                         <div className="flex items-center justify-between">
                             <div>
                                 <div className="flex items-center space-x-2">
-                                    <span className="text-xl font-bold">${discountedPrice.toLocaleString()}</span>
+                                    <span className="text-xl font-bold">{discountedPrice.toLocaleString()}</span>
                                     {producto.descontable && (
                                         <span className="text-sm text-muted-foreground line-through">
-                                            ${originalPrice.toLocaleString()}
+                                            {originalPrice.toLocaleString()}
                                         </span>
                                     )}
                                 </div>
@@ -244,36 +243,12 @@ const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, la
 
                         </div>
 
-                        {/* Botón de agregar al carrito en hover */}
-                        {showAddToCart && (
-                            <div className="absolute bottom-4 left-4 right-4">
-                                <Button
-                                size="sm"
-                                    onClick={handleAddToCart}
-                                    disabled={isAddingToCart}
-                                    variant="secondary"
-                                    className="text-xs w-full"
-                                >
-                                    {isAddingToCart ? (
-                                        <>
-                                            <Loader className="animate-spin" />
-                                            Agregando...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <ShoppingCart/>
-                                            Agregar al carrito
-                                        </>
-                                    )}
-                                </Button>
-                            </div>
-                        )}
                     </div>
 
                     {/* Badges */}
                     <div className="absolute top-2 left-2 flex flex-col space-y-1">{getBadges()}</div>
 
-                   
+
                 </div>
 
                 {/* Información del producto */}
@@ -322,13 +297,13 @@ const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, la
                     {/* Precio */}
                     <div className="space-y-1">
                         <div className="flex items-center space-x-2">
-                            <span className="font-bold text-lg">${discountedPrice.toLocaleString()}</span>
+                            <span className="font-bold text-lg">{discountedPrice.toLocaleString()} ARS</span>
                             {producto.descontable && (
-                                <span className="text-sm text-muted-foreground line-through">${originalPrice.toLocaleString()}</span>
+                                <span className="text-sm text-muted-foreground line-through">{originalPrice.toLocaleString()} ARS</span>
                             )}
                         </div>
 
-                        {savings > 0 && <p className="text-xs text-green-600 font-medium">Ahorras ${savings.toLocaleString()}</p>}
+                        {savings > 0 && <p className="text-xs text-green-600 font-medium">Ahorras {savings.toLocaleString()}</p>}
 
                         {/* Envío gratis */}
                         {discountedPrice > 50000 && (
@@ -338,8 +313,26 @@ const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, la
                             </div>
                         )}
                     </div>
+                    <Button
+                        size="sm"
+                        onClick={handleAddToCart}
+                        disabled={isAddingToCart}
+                        variant="outline"
+                        className="text-xs w-full mt-2"
+                    >
+                        {isAddingToCart ? (
+                            <>
+                                <Loader className="animate-spin" />
+                                Agregando...
+                            </>
+                        ) : (
+                            <>
+                                <ShoppingCart className="size-4" />
+                                Agregar al carrito
+                            </>
+                        )}
+                    </Button>
 
-                  
                 </CardContent>
             </div>
         </Card>

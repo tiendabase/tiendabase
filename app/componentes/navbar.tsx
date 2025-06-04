@@ -41,10 +41,6 @@ const Navbar = () => {
     const [isScrolled, setIsScrolled] = useState(false)
     const [isSearchOpen, setIsSearchOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState("")
-    const [isDarkMode, setIsDarkMode] = useState(false)
-    const [notifications, setNotifications] = useState(3)
-    const [isCartPreviewOpen, setIsCartPreviewOpen] = useState(false)
-
     const searchRef = useRef<HTMLInputElement>(null)
 
     // Detectar scroll para cambiar el estilo del navbar
@@ -112,7 +108,7 @@ const Navbar = () => {
             <motion.header
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                className={`fixed top-0 w-screen mx-auto z-50 px-10 transition-all duration-300 ${isScrolled || !isHomePage
+                className={`fixed top-0 w-screen mx-auto z-50 px-5 transition-all duration-300 ${isScrolled || !isHomePage
                     ? "bg-primary backdrop-blur-md shadow"
                     : "bg-transparent"
                     }`}
@@ -123,10 +119,10 @@ const Navbar = () => {
                         <Link href="/" className="flex items-center space-x-2">
                             <motion.div
                                 whileHover={{ scale: 1.05 }}
-                                className={`lg:text-xl font-bold ${isScrolled || !isHomePage ? "text-foreground" : "text-white"}`}
+                                className={` font-bold ${isScrolled || !isHomePage ? "text-foreground" : "text-white"}`}
                             >
                                 <Image
-                                    className="aspect-square w-20" src="/logo.png" alt="logo" width={100} height={100} />
+                                    className="aspect-square mt-1 w-20" src="/logo.png" alt="logo" width={100} height={100} />
                             </motion.div>
                         </Link>
 
@@ -171,7 +167,7 @@ const Navbar = () => {
                         </nav>
 
                         {/* Acciones del usuario */}
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2 mr-3">
                             {/* Búsqueda */}
                             <Button
                                 variant="link"
@@ -186,7 +182,7 @@ const Navbar = () => {
                             <Button
                                 variant="link"
                                 size="icon"
-                                className={"text-secondary"}
+                                className={"text-secondary relative"}
                                 asChild
                             >
                                 <Link href="/favoritos">
@@ -204,8 +200,6 @@ const Navbar = () => {
                                 <Button
                                     variant="link"
                                     size="icon"
-                                    onMouseEnter={() => setIsCartPreviewOpen(true)}
-                                    onMouseLeave={() => setIsCartPreviewOpen(false)}
                                     className={"text-secondary"}
                                     asChild
                                 >
@@ -244,7 +238,7 @@ const Navbar = () => {
                                         <Menu className="w-5 h-5" />
                                     </Button>
                                 </SheetTrigger>
-                                <SheetContent side="right" >
+                                <SheetContent side="right" className="text-md" >
                                     <SheetHeader>
                                         <SheetTitle>Menú</SheetTitle>
                                         <SheetDescription>Navega por nuestra tienda</SheetDescription>
@@ -254,20 +248,20 @@ const Navbar = () => {
                                             <Link
                                                 key={link.href}
                                                 href={link.href}
-                                                className="flex items-center space-x-3 p-3 rounded-lg hover:bg-accent transition-colors"
+                                                className="flex items-center space-x-3 p-2  rounded-lg hover:bg-secondary transition-colors"
                                             >
-                                                <link.icon className="w-5 h-5" />
+                                                <link.icon className="size-4" />
                                                 <span>{link.label}</span>
                                                 {link.badge && <Badge className="ml-auto bg-red-500 text-white">{link.badge}</Badge>}
                                             </Link>
                                         ))}
                                         <Separator />
-                                        <h3 className="font-semibold px-3">Categorías</h3>
+                                        <h3 className="font-semibold">Categorías</h3>
                                         {categories.slice(0, 4).map((category) => (
                                             <Link
                                                 key={category.name}
                                                 href={category.href}
-                                                className="flex items-center justify-between p-3 rounded-lg hover:bg-accent transition-colors"
+                                                className="flex items-center justify-between p-2 rounded-lg hover:bg-secondary transition-colors"
                                             >
                                                 <span>{category.name}</span>
                                                 <Badge variant="secondary">{category.count}</Badge>
@@ -299,16 +293,14 @@ const Navbar = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             <Card className="shadow-2xl">
-                                <CardContent className="p-6">
+                                <CardContent >
                                     <form onSubmit={handleSearchSubmit} className="space-y-4">
                                         <div className="relative">
-                                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                                             <Input
                                                 ref={searchRef}
                                                 value={searchQuery}
                                                 onChange={(e) => setSearchQuery(e.target.value)}
                                                 placeholder="¿Qué estás buscando?"
-                                                className="pl-10 pr-10 h-12 text-lg"
                                             />
                                             <Button
                                                 type="button"
