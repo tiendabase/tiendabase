@@ -9,9 +9,9 @@ import ProductsContent from "./products-content";
 const Products = () => (
     <>
         <Navbar />
-        <div className="mt-25 mb-8 px-5 sm:px-5 md:px-10  flex flex-col gap-3">
+        <div className="mt-25 mb-8  flex flex-col gap-3">
             <Breadcrumb />
-            <div className="flex flex-col md:flex-row gap-6 md:gap-10 relative ">
+            <div className="flex flex-col md:flex-row gap-6 sm:px-5 lg:px-10 md:gap-10 relative ">
                 <ProductsFilter />
                 <ProductsContent />
             </div>

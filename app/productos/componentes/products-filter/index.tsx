@@ -120,7 +120,7 @@ const ProductsFilter = () => {
           <Button
             variant="ghost"
             type="button"
-            className={`flex text-xs bg-white text-zinc-500 sticky top-21 border-y rounded-none md:hidden w-full`}
+            className={`flex text-xs  sticky top-16 z-50 border-y rounded-none md:hidden w-full`}
           >
             Agregar filtro <ChevronRight className="size-4" />
           </Button>

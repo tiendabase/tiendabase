@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Heart, ShoppingCart, Eye, Star, Truck, Palette, Ruler, TrendingUp, Clock, Package } from "lucide-react"
+import { Heart, ShoppingCart, Eye, Star, Truck, Palette, Ruler, TrendingUp, Clock, Package, Loader } from "lucide-react"
 
 interface Props {
     producto: Producto & { variantes: Variante[]; imagenes: Imagen[] }
@@ -248,19 +248,20 @@ const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, la
                         {showAddToCart && (
                             <div className="absolute bottom-4 left-4 right-4">
                                 <Button
+                                size="sm"
                                     onClick={handleAddToCart}
                                     disabled={isAddingToCart}
-                                    className="w-full shadow-lg"
                                     variant="secondary"
+                                    className="text-xs w-full"
                                 >
                                     {isAddingToCart ? (
                                         <>
-                                            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2" />
+                                            <Loader className="animate-spin" />
                                             Agregando...
                                         </>
                                     ) : (
                                         <>
-                                            <ShoppingCart className="w-4 h-4 mr-2" />
+                                            <ShoppingCart/>
                                             Agregar al carrito
                                         </>
                                     )}

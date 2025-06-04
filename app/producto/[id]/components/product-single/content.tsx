@@ -49,7 +49,9 @@ import {
   ChevronRight,
   Info,
   Package,
+  Check,
 } from "lucide-react"
+import { Label } from "@/components/ui/label"
 
 interface ProductViewProps {
   producto: Producto & {
@@ -216,54 +218,7 @@ const ProductView = ({ producto }: ProductViewProps) => {
               <span>Gana {Math.floor(getSelectedPrice() / 100)} puntos con esta compra</span>
             </div>
           </div>
-
-          {/* Opciones de producto */}
-          <div className="space-y-4">
-            {producto.variantes.length > 1 && (
-              <div className="space-y-3">
-                <h3 className="font-semibold">Variantes disponibles</h3>
-                <Select value={selectedVariant} onValueChange={setSelectedVariant}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecciona un color" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Colores</SelectLabel>
-                      {producto.variantes.map((variante) => (
-                        <SelectItem key={variante.id} value={variante.id}>
-                          {variante.codigoHexColor || `Variante ${variante.id}`}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-semibold">Talla</span>
-                    <Button
-                      variant="link"
-                      size="sm"
-                      onClick={() => setShowSizeGuide(!showSizeGuide)}
-                      className="p-0 h-auto"
-                    >
-                      Guía de tallas
-                    </Button>
-                  </div>
-                  <ToggleGroup type="single" value={itemSize} onValueChange={setItemSize}>
-                    {producto.variantes.map(
-                      (variante) =>
-                        variante.talla && (
-                          <ToggleGroupItem key={variante.talla} value={variante.talla}>
-                            {variante.talla}
-                          </ToggleGroupItem>
-                        ),
-                    )}
-                  </ToggleGroup>
-                </div>
-              </div>
-            )}
-
+          <div>
             {/* Cantidad y acciones */}
             <div className="space-y-4">
               <div>
@@ -344,7 +299,7 @@ const ProductView = ({ producto }: ProductViewProps) => {
               {deliveryOptions.map((option) => (
                 <div
                   key={option.type}
-                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-accent cursor-pointer"
+                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-secondary cursor-pointer"
                 >
                   <div className="flex items-center space-x-3">
                     <option.icon className="w-5 h-5 text-primary" />

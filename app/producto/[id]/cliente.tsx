@@ -21,7 +21,7 @@ const Cliente = ({ producto }: { producto: Producto & { imagenes: Imagen[], vari
     const { data, error } = useSwr<(Producto & { imagenes: Imagen[], variantes: Variante[] })[]>("/api/producto/mostrar", fetcher);
 
     return (
-        <div className="mt-25 mb-10 px-8 sm:px-30 md:px-10 lg:px-25 xl:px-60">
+        <div className="mt-25 mb-10 px-5 sm:px-30 md:px-10 lg:px-25 xl:px-60">
             <Breadcrumb />
 
             <div className="grid grid-cols-1 md:grid-cols-2 md:gap-10 lg:gap-20 xl:gap-20">
@@ -44,7 +44,7 @@ const Cliente = ({ producto }: { producto: Producto & { imagenes: Imagen[], vari
                 </Button>
             </div>
             {data && (
-                <section className="grid grid-cols-2 sm:grid-cols-3  gap-3 lg:grid-cols-4">
+                <section className="grid grid-cols-2 md:grid-cols-3  gap-3 lg:grid-cols-4">
                     {data.map((item) => (
                         <ProductoItem key={item.id} producto={item} />
                     ))}

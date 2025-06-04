@@ -2,9 +2,9 @@ import List from "./list";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const ProductsContent = () => {
- 
+
   return (
-    <section  className="w-full">
+    <section className="w-full" >
       <div className="flex justify-between items-center gap-4 mb-5">
         <h2 className="text-xl">
           Todos los productos <span className="text-zinc-400">(133)</span>

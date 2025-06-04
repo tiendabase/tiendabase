@@ -13,14 +13,6 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 import type { RootState } from "@/store"
@@ -30,9 +22,6 @@ import {
     User,
     Menu,
     Heart,
-    Bell,
-    Moon,
-    Sun,
     Shirt,
     Zap,
     Gift,
@@ -81,7 +70,7 @@ const Navbar = () => {
         { href: "/productos", label: "Productos", icon: Shirt },
         { href: "/ofertas", label: "Ofertas", icon: Zap, badge: "HOT" },
         { href: "/nuevos", label: "Nuevos", icon: TrendingUp },
-        
+
     ]
 
     const categories = [
@@ -124,7 +113,7 @@ const Navbar = () => {
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 className={`fixed top-0 w-screen mx-auto z-50 px-10 transition-all duration-300 ${isScrolled || !isHomePage
-                    ? "bg-background/95 backdrop-blur-md border-b border-border shadow-lg"
+                    ? "bg-primary backdrop-blur-md shadow"
                     : "bg-transparent"
                     }`}
             >
@@ -136,7 +125,8 @@ const Navbar = () => {
                                 whileHover={{ scale: 1.05 }}
                                 className={`lg:text-xl font-bold ${isScrolled || !isHomePage ? "text-foreground" : "text-white"}`}
                             >
-                                <span className="text-primary">E</span>-Shop
+                                <Image
+                                    className="aspect-square w-20" src="/logo.png" alt="logo" width={100} height={100} />
                             </motion.div>
                         </Link>
 
@@ -146,14 +136,10 @@ const Navbar = () => {
                                 <div key={link.href} className="relative group">
                                     <Link
                                         href={link.href}
-                                        className={`flex items-center space-x-1 px-3 py-2 rounded-lg transition-all duration-200 ${isScrolled || !isHomePage
-                                            ? "text-foreground hover:text-primary hover:bg-accent"
-                                            : "text-white hover:text-primary hover:bg-white/10"
-                                            }`}
+                                        className={`flex items-center space-x-1  py-2 rounded-lg transition-all duration-200 text-secondary`}
                                     >
-                                        <link.icon className="w-4 h-4" />
                                         <span className="font-medium">{link.label}</span>
-                                        {link.badge && <Badge className="ml-1 bg-red-500 text-white text-xs">{link.badge}</Badge>}
+                                        {link.badge && <Badge variant="destructive" className="ml-1">{link.badge}</Badge>}
                                     </Link>
 
                                     {/* Mega menu para productos */}
@@ -188,21 +174,19 @@ const Navbar = () => {
                         <div className="flex items-center space-x-2">
                             {/* Búsqueda */}
                             <Button
-                                variant="ghost"
+                                variant="link"
                                 size="icon"
                                 onClick={() => setIsSearchOpen(true)}
-                                className={`${isScrolled || !isHomePage ? "text-foreground hover:text-primary" : "text-white hover:text-primary"
-                                    }`}
+                                className={`text-secondary`}
                             >
                                 <Search className="w-5 h-5" />
                             </Button>
 
                             {/* Favoritos */}
                             <Button
-                                variant="ghost"
+                                variant="link"
                                 size="icon"
-                                className={`relative ${isScrolled || !isHomePage ? "text-foreground hover:text-primary" : "text-white hover:text-primary"
-                                    }`}
+                                className={"text-secondary"}
                                 asChild
                             >
                                 <Link href="/favoritos">
@@ -218,34 +202,32 @@ const Navbar = () => {
                             {/* Carrito */}
                             <div className="relative">
                                 <Button
-                                    variant="ghost"
+                                    variant="link"
                                     size="icon"
                                     onMouseEnter={() => setIsCartPreviewOpen(true)}
                                     onMouseLeave={() => setIsCartPreviewOpen(false)}
-                                    className={`relative ${isScrolled || !isHomePage ? "text-foreground hover:text-primary" : "text-white hover:text-primary"
-                                        }`}
+                                    className={"text-secondary"}
                                     asChild
                                 >
                                     <Link href="/carrito">
                                         <ShoppingCart className="w-5 h-5" />
                                         {cartItems.length > 0 && (
-                                            <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 flex items-center justify-center bg-primary text-primary-foreground text-xs">
+                                            <Badge variant="outline" className="absolute -top-1 -right-1 w-5 h-5 ">
                                                 {cartItems.length}
                                             </Badge>
                                         )}
                                     </Link>
                                 </Button>
 
-                               
+
                             </div>
 
 
                             <Link href='/login'>
                                 <Button
-                                    variant="ghost"
+                                    variant="link"
                                     size="icon"
-                                    className={`${isScrolled || !isHomePage ? "text-foreground hover:text-primary" : "text-white hover:text-primary"
-                                        }`}
+                                    className="text-secondary"
                                 >
                                     <User className="w-5 h-5" />
                                 </Button>
@@ -255,10 +237,9 @@ const Navbar = () => {
                             <Sheet>
                                 <SheetTrigger asChild>
                                     <Button
-                                        variant="ghost"
+                                        variant="link"
                                         size="icon"
-                                        className={`lg:hidden ${isScrolled || !isHomePage ? "text-foreground hover:text-primary" : "text-white hover:text-primary"
-                                            }`}
+                                        className={`lg:hidden text-secondary`}
                                     >
                                         <Menu className="w-5 h-5" />
                                     </Button>
@@ -331,7 +312,7 @@ const Navbar = () => {
                                             />
                                             <Button
                                                 type="button"
-                                                variant="ghost"
+                                                variant="link"
                                                 size="icon"
                                                 onClick={() => setIsSearchOpen(false)}
                                                 className="absolute right-1 top-1/2 -translate-y-1/2"

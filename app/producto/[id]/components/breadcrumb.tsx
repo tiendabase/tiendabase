@@ -1,7 +1,7 @@
 import { Home } from "lucide-react";
 
 const Breadcrumb = () => (
-  <section className="my-6">
+  <section className="m-6">
     <div className="container">
       <ul className="flex text-sm items-center gap-2">
         <li>

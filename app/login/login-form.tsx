@@ -27,7 +27,7 @@ export function LoginForm({
             </Button>
             <div className={cn("flex flex-col gap-6", className)} {...props}>
 
-                <Card className="overflow-hidden">
+                <Card className="overflow-hidden py-0">
                     <CardContent className="grid m-0 p-0 md:grid-cols-2">
                         <form onSubmit={(event) => {
                             event.preventDefault();
@@ -140,8 +140,8 @@ export function LoginForm({
                                 layout="fill"
                                 src='/landscape.jpg'
                                 alt="Background Image"
-                                className=" inset-0 object-cover 
-                            rounded dark:brightness-[0.2] dark:grayscale"
+                                className=" inset-0 object-cover   
+                             brightness-[0.7] dark:grayscale"
                             />
                         </div>
                     </CardContent>
