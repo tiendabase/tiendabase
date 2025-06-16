@@ -19,19 +19,13 @@ import {
 } from "@tanstack/react-table"
 import {
     CheckCircle2Icon,
-    CheckCircleIcon,
-    ChevronDownIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
     ChevronsLeftIcon,
     ChevronsRightIcon,
     ColumnsIcon,
     Ellipsis,
-    GripVerticalIcon,
-    LoaderIcon,
-    MoreVerticalIcon,
-    PlusIcon,
-    TrendingUpIcon,
+    LoaderIcon
 } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -60,10 +54,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {
-    Tabs,
-    TabsContent
-} from "@/components/ui/tabs"
 import { useRouter } from "next/navigation"
 import { Imagen, Producto, Variante } from "@prisma/client"
 
@@ -75,9 +65,10 @@ const columns: ColumnDef<Producto & { imagenes: Imagen[], variantes: Variante[] 
         cell: ({ row }) => (
             <div className="flex items-center gap-2">
                 <div className="h-9 w-7 rounded overflow-hidden relative">
-                    <Image layout="fill"
-                        objectFit="cover"
-                        src={row.original.imagenes.at(0)?.url!}
+                    <Image fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        src={row.original.imagenes.at(0)?.url! || "/noimage.webp"}
                         alt="Imagen producto" />
                 </div>
                 <span>

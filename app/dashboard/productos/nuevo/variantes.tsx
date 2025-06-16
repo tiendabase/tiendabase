@@ -2,21 +2,18 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { generarVariantes } from "@/lib/utils";
+import { FormularioNuevoProducto, generarVariantes } from "@/lib/utils";
 import { Imagen, Producto, Variante } from "@prisma/client";
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from "@tanstack/react-table";
-import { useMemo, useState } from "react";
-import { Control, Controller } from "react-hook-form";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Control, Controller, useFieldArray, UseFormReturn, useWatch } from "react-hook-form";
 
 interface Props {
-    control: Control<Producto & { imagenes: Imagen[], variantes: Variante[] }>;
-    tallas2: string[];
-    tallas: string[];
-    colores: { nombre: string, codigo: string }[]
+    form: UseFormReturn<FormularioNuevoProducto>
 }
 
 const getColumns = (
-    control: Control<Producto & { imagenes: Imagen[], variantes: Variante[] }>
+    control: Control<FormularioNuevoProducto>
 ): ColumnDef<Variante>[] => [
         {
             id: "estado",
@@ -44,7 +41,7 @@ const getColumns = (
             cell: ({ row }) => (
                 <Controller defaultValue={row.original.tipo}
                     name={`variantes.${row.index}.tipo`} control={control} render={({ field }) => (
-                        <div className={`${row.original.tipo == "POR_DEFECTO" ? "text-primary font-bold" : ""}`}>
+                        <div className={`${row.original.tipo == "POR_DEFECTO" ? "text-accent font-bold" : ""}`}>
                             <p className={`text-sm`}>
                                 {field.value == "POR_DEFECTO" ? "Por defecto" : "Variante"}
                             </p>
@@ -78,7 +75,7 @@ const getColumns = (
             accessorKey: "talla",
             header: "Talla",
             cell: ({ row }) => (<Controller
-                defaultValue={row.original.titulo}
+                defaultValue={row.original.talla || ""}
                 control={control}
                 name={`variantes.${row.index}.talla`}
                 render={({ field }) => (
@@ -90,12 +87,13 @@ const getColumns = (
             accessorKey: "codigoHexColor",
             header: "Color",
             cell: ({ row }) => (<Controller
-                defaultValue={row.original.titulo}
+                defaultValue={row.original.codigoHexColor || ""}
                 control={control}
                 name={`variantes.${row.index}.codigoHexColor`}
                 render={({ field }) => (
                     <div>
-                        {row.original.codigoHexColor ? <Card className="h-7 w-7 mx-auto rounded-sm py-0 border-none" style={{ background: `${field.value}` }} /> : "-"}
+
+                        {field.value ? <Card className="h-7 w-7 mx-auto rounded-sm py-0 border-none" style={{ backgroundColor: `${field.value}` }} /> : "-"}
                     </div>
                 )}
             />)
@@ -105,7 +103,7 @@ const getColumns = (
             header: "Precio",
             cell: ({ row }) => (
                 <Controller
-                    defaultValue={row.original.precio}
+                    defaultValue={row.original.precio.toString()}
                     control={control}
                     name={`variantes.${row.index}.precio`}
                     render={({ field }) => (
@@ -123,39 +121,74 @@ const getColumns = (
 
 
     ];
-export default function Variantes({ control,
-    colores, tallas, tallas2
+export default function Variantes({ form
 }: Props) {
     const [pagination, setPagination] = useState({
         pageIndex: 0,
         pageSize: 10,
     });
-    const [rowSelection, setRowSelection] = useState({});
-    const variantesGeneradas = useMemo(() => {
-        return [{
+    const { control, setValue, getValues } = form;
+
+    const colores = useWatch({ control, name: "colores" });
+    const tallas = useWatch({ control, name: "tallas" });
+    const tallas2 = useWatch({ control, name: "tallas2" });
+
+    const { fields } = useFieldArray({
+        control,
+        name: "variantes",
+    });
+    useEffect(() => {
+        const anteriores = getValues("variantes") ?? [];
+
+        const porDefecto = {
             codigoHexColor: "",
             estado: true,
-            id: "",
-            precio: 0,
-            productoId: "",
+            precio:
+                anteriores.find((v) => v.tipo === "POR_DEFECTO")?.precio ?? "0",
             talla: "",
             tipo: "POR_DEFECTO",
-            titulo: "Por defecto"
-        }, ...generarVariantes({ tallas, tallas2, colores })];
-    }, [tallas, tallas2, colores]);
+            titulo: "Por defecto",
+        } as any;
+
+        const hayVariantes =
+            (colores?.length ?? 0) > 0 ||
+            (tallas?.length ?? 0) > 0 ||
+            (tallas2?.length ?? 0) > 0;
+
+        let nuevasVariantes = hayVariantes
+            ? generarVariantes({ colores, tallas, tallas2 })
+            : [];
+
+        // fusionar las nuevas con las antiguas (conservando estado/precio)
+        const combinadas = nuevasVariantes.map((nueva) => {
+            const existente = anteriores.find(
+                (prev) =>
+                    prev.codigoHexColor === nueva.codigoHexColor &&
+                    prev.talla === nueva.talla &&
+                    prev.tipo === nueva.tipo
+            );
+            return existente
+                ? {
+                    ...nueva,
+                    precio: existente.precio,
+                    estado: existente.estado
+                }
+                : nueva;
+        });
+
+        // siempre incluir la variante POR_DEFECTO al principio
+        setValue("variantes", [porDefecto, ...combinadas]);
+    }, [colores, tallas, tallas2]);
     const table = useReactTable({
-        data: variantesGeneradas,
+        data: fields,
         columns: getColumns(control) as Variante[],
         state: {
             pagination
         },
-        getRowId: (row) => row.id ? row.id.toString() : row.tipo === "POR_DEFECTO" ? "default" : Math.random().toString(),
-        enableRowSelection: true,
-        onRowSelectionChange: setRowSelection,
+        getRowId: (row) => row.codigoHexColor ? row.codigoHexColor.toString() : row.tipo === "POR_DEFECTO" ? "default" : Math.random().toString(),
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel()
     })
-
     return (
         <>
             <Table className="" >

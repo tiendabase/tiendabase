@@ -1,12 +1,13 @@
 import { Card } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
-import { Imagen, Producto, Variante } from "@prisma/client";
-import { Control, Controller } from "react-hook-form";
+import { FormularioNuevoProducto } from "@/lib/utils";
+import { Control, Controller, UseFormReturn } from "react-hook-form";
 
 interface Props {
-    control: Control<Producto & { imagenes: Imagen[], variantes: Variante[] }>;
+    form: UseFormReturn<FormularioNuevoProducto>
 }
-export default function Organizar({ control }: Props) {
+export default function Organizar({ form }: Props) {
+    const {control} = form;
     return (
         <>
             <h3 className="font-semibold text-lg">

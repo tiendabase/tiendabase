@@ -1,7 +1,6 @@
 'use client';
 import React, { ReactElement, createContext, useContext, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -11,7 +10,6 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 // Creamos un contexto para almacenar el estado del Snackbar
 const ModalContext = createContext({
@@ -24,14 +22,12 @@ const ModalContext = createContext({
             ButtonText?: { yes: string, no: string },
             hasBack?: boolean;
             callback?: Function,
-            replace: string
         }
     ) => {
     }
 });
 export const ModalProvider = ({ children }: any) => {
     const [open, setOpen] = useState(false);
-    const router = useRouter();
     const [action, setAction] = useState<{
         params: {
             content: ReactElement | string,
@@ -41,7 +37,6 @@ export const ModalProvider = ({ children }: any) => {
             ButtonText?: { yes: string, no: string },
             hasBack?: boolean,
             callback?: Function,
-            replace: string
         }
     }>({
         params:
@@ -52,8 +47,7 @@ export const ModalProvider = ({ children }: any) => {
             titulo: '',
             ButtonText: { yes: 'Aceptar', no: 'Cancelar' },
             hasBack: false,
-            callback: () => { },
-            replace: ''
+            callback: () => { }
         }
     });
     const openModal = (params: typeof action.params) => {
@@ -68,10 +62,10 @@ export const ModalProvider = ({ children }: any) => {
             <AlertDialog open={open} onOpenChange={setOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>
+                        <AlertDialogTitle className='text-center'>
                             {action.params.titulo}
                         </AlertDialogTitle>
-                        <AlertDialogDescription>
+                        <AlertDialogDescription className='text-center py-3'>
                             {
                                 action.params.content
                             }
@@ -85,26 +79,42 @@ export const ModalProvider = ({ children }: any) => {
                             onClick={async () => {
                                 const { data, url, callback } = action.params;
                                 try {
-                                    toast.promise(fetch(url, {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/json',
-                                        },
-                                        body: JSON.stringify(data),
-                                    }).then(res => res.json()), {
-                                        success(res) {
-                                            if (callback) {
-                                                callback(res);
-                                                setOpen(false);
+                                    toast.promise(
+                                        fetch(url, {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                            },
+                                            body: JSON.stringify(data),
+                                        }).then(async (res) => {
+                                            const responseData = await res.json();
+
+                                            // Si el status HTTP indica error, lanzar excepción
+                                            if (!res.ok) {
+                                                throw new Error(responseData.message || "Ha ocurrido un error");
                                             }
-                                            return res.message ?? "Realizado con éxito"
-                                        },
-                                        error(res) {
-                                            return res.message ?? "Ha ocurrido un error"
+
+                                            // Si la respuesta contiene un campo 'error', también es un error
+                                            if (responseData.error) {
+                                                throw new Error(responseData.message || responseData.error || "Ha ocurrido un error");
+                                            }
+
+                                            return responseData;
+                                        }),
+                                        {
+                                            loading: 'Procesando...',
+                                            success: (res) => {
+                                                if (callback) {
+                                                    callback(res);
+                                                }
+                                                setOpen(false);
+                                                return res.message || "Realizado con éxito";
+                                            },
+                                            error: (error) => {
+                                                return error.message || "Ha ocurrido un error";
+                                            }
                                         }
-                                    })
-
-
+                                    );
                                 } catch (error) {
                                     toast.error("Error en la petición");
                                 }

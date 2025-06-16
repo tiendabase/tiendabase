@@ -213,8 +213,7 @@ const Hero = () => {
                                                 </Link>
                                                 <Link href="/catalogo">
                                                     <Button
-                                                        variant="outline"
-                                                        className="borde hover:bg-white hover:text-foreground"
+                                                        variant="secondary"
                                                     >
                                                         <Play className="w-4 h-4 mr-2" />
                                                         {slide.ctaSecondary}

@@ -1,4 +1,3 @@
-import { $Enums, Variante } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -17,25 +16,36 @@ export function generarVariantes({
   tallas: string[];
   tallas2: string[];
   colores: { nombre: string; codigo: string }[];
-}): Variante[] {
-  const variantes: Variante[] = [];
+}): {
+  titulo: string;
+  precio: string;
+  estado: boolean;
+  tipo: "POR_DEFECTO" | "OPCION";
+  codigoHexColor?: string;
+  talla?: string;
+}[] {
+  const variantes: {
+    titulo: string;
+    precio: string;
+    estado: boolean;
+    tipo: "POR_DEFECTO" | "OPCION";
+    codigoHexColor?: string;
+    talla?: string;
+  }[] = [];
   const todasLasTallas = [...tallas, ...tallas2];
   const hayTallas = todasLasTallas.length > 0;
   const hayColores = colores.length > 0;
-
   if (hayTallas && hayColores) {
     // Combinaciones completas: Color / Talla
     for (const talla of todasLasTallas) {
       for (const color of colores) {
         variantes.push({
-          id: "",
           titulo: `En talla ${talla} / Color: ${color.nombre}`,
-          precio: 0,
+          precio: "0",
           codigoHexColor: color.codigo,
           talla,
           tipo: "OPCION",
           estado: true,
-          productoId: "",
         });
       }
     }
@@ -43,28 +53,24 @@ export function generarVariantes({
     // Solo tallas
     for (const talla of todasLasTallas) {
       variantes.push({
-        id: "",
         titulo: "En talla " + talla,
-        precio: 0,
-        codigoHexColor: null,
+        precio: "0",
+        codigoHexColor: "",
         talla,
         tipo: "OPCION",
         estado: true,
-        productoId: ""
       });
     }
   } else if (hayColores) {
     // Solo colores
     for (const color of colores) {
       variantes.push({
-        id: "",
         titulo: "Color: " + color.nombre,
-        precio: 0,
+        precio: "0",
         codigoHexColor: color.codigo,
-        talla: null,
+        talla: "",
         tipo: "OPCION",
         estado: true,
-        productoId: "",
       });
     }
   }
@@ -88,3 +94,30 @@ export const setModalCallback = (cb: ModalCallback | null) => {
 };
 
 export const getModalCallback = () => callback;
+
+
+
+
+
+export type FormularioNuevoProducto = {
+  titulo: string;
+  descripcion: string;
+  subtitulo?: string;
+  url?: string;
+  descuento: string; // lo convertirás a float
+  descontable: boolean;
+  estado: "NUEVO" | "USADO";
+  colores: { codigo: string, nombre: string }[]
+  tieneVariantes: boolean,
+  tallas: string[]
+  tallas2: string[]
+  visible: boolean;
+  variantes: {
+    titulo: string;
+    precio: string;
+    estado: boolean;
+    tipo: "POR_DEFECTO" | "OPCION";
+    codigoHexColor?: string;
+    talla?: string;
+  }[];
+};

@@ -206,7 +206,7 @@ const Navbar = () => {
                                     <Link href="/carrito">
                                         <ShoppingCart className="w-5 h-5" />
                                         {cartItems.length > 0 && (
-                                            <Badge variant="outline" className="absolute -top-1 -right-1 w-5 h-5 ">
+                                            <Badge className="absolute -top-1 -right-1 w-5 h-5 ">
                                                 {cartItems.length}
                                             </Badge>
                                         )}

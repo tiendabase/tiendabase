@@ -1,38 +1,49 @@
 // app/api/tu-endpoint/route.ts
-import { Producto, Variante } from "@prisma/client";
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { FormularioNuevoProducto } from "@/lib/utils"; // o donde tengas el tipo
 
 export const POST = async (request: NextRequest) => {
   try {
-    // 1. Parsear el JSON del body
-    const data = await request.json() as Producto & { variantes: Variante[] }
-    const { variantes, ...datos } = data;
+    const data = await request.json() as FormularioNuevoProducto;
 
-    // 2. Validar o procesar los datos
-    // (aquí podrías hacer lógica como guardar en DB, etc.)
-    const producto = await prisma?.producto.create({
+    const { variantes, descuento, tieneVariantes, colores, tallas, tallas2, ...productoDatos } = data;
+
+
+    // Transformar variantes
+    const variantesPreparadas = variantes.map((v) => ({
+      titulo: v.titulo,
+      precio: parseFloat(v.precio),
+      estado: v.estado,
+      tipo: v.tipo,
+      codigoHexColor: v.codigoHexColor,
+      talla: v.talla,
+    }));
+
+    const nuevoProducto = await prisma.producto.create({
       data: {
-        ...datos, variantes: {
-          createMany: { data: variantes.map(value => ({ ...value, precio: +value.precio })) }
-        }
+        ...productoDatos,
+        descuento: parseFloat(descuento || "0"),
+        variantes: {
+          createMany: {
+            data: variantesPreparadas,
+          },
+        },
       },
+    });
 
-    })
-    // 3. Retornar éxito
     return Response.json({
       success: true,
-      id: producto?.id,
-      message: "Datos recibidos correctamente",
+      id: nuevoProducto.id,
+      message: "Producto guardado correctamente",
     }, { status: 200 });
 
   } catch (error: any) {
-    // 4. Manejo de errores
-    console.error("Error en el POST:", error);
+    console.error("Error al guardar producto:", error);
     return Response.json({
       success: false,
+      message: "Error al guardar producto",
       error: error?.message ?? "Error interno del servidor",
-      message: "No se pudieron procesar los datos",
     }, { status: 500 });
   }
 };
