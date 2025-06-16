@@ -137,35 +137,6 @@ const FavoritosPage = () => {
         })
     }
 
-    const handleShareFavorites = async () => {
-        if (navigator.share) {
-            try {
-                await navigator.share({
-                    title: "Mis productos favoritos",
-                    text: `Mira mis ${favProducts.length} productos favoritos en E-Shop`,
-                    url: window.location.href,
-                })
-            } catch (error) {
-                console.error("Error sharing:", error)
-            }
-        }
-    }
-
-    const categories = [
-        { value: "all", label: "Todas las categorías" },
-        { value: "camisetas", label: "Camisetas" },
-        { value: "pantalones", label: "Pantalones" },
-        { value: "vestidos", label: "Vestidos" },
-        { value: "accesorios", label: "Accesorios" },
-    ]
-
-    const sortOptions = [
-        { value: "newest", label: "Más recientes" },
-        { value: "name", label: "Nombre A-Z" },
-        { value: "price-low", label: "Precio: Menor a mayor" },
-        { value: "price-high", label: "Precio: Mayor a menor" },
-    ]
-
     // Skeleton loader
     const ProductSkeleton = () => (
         <div className="animate-pulse">

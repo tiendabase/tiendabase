@@ -193,7 +193,7 @@ export function DataTable({
                         <TableRow className="border-none " key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
                                 return (
-                                    <TableHead className="border-none bg-secondary p-4" key={header.id} colSpan={header.colSpan}>
+                                    <TableHead className="border-none  p-4" key={header.id} colSpan={header.colSpan}>
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(

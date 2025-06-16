@@ -57,7 +57,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-secondary data-[state=open]:animate-in data-[state=closed]:animate-out overflow-hidden data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-1rem)] max-h-[calc(100%-1rem)] translate-x-[-50%] translate-y-[-50%] rounded-lg border shadow-lg duration-200 ",
+          "bg-popover data-[state=open]:animate-in data-[state=closed]:animate-out overflow-hidden data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-1rem)] max-h-[calc(100%-1rem)] translate-x-[-50%] translate-y-[-50%] rounded-lg border shadow-lg duration-200 ",
           className
         )}
         {...props}
@@ -73,7 +73,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn("flex flex-col sticky top-0 z-50 bg-secondary ", className)}
+      className={cn("flex flex-col sticky top-0 z-50 bg-card ", className)}
       {...props}
     />
   )
@@ -84,7 +84,7 @@ function DialogFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="dialog-footer"
       className={cn(
-        "flex flex-col-reverse sticky h-15 w-full bottom-0 bg-card p-3 gap-2 sm:flex-row sm:justify-end",
+        "flex flex-col-reverse sticky h-15 w-full bottom-0 bg-background border-t p-3 gap-2 sm:flex-row sm:justify-end",
         className
       )}
       {...props}
@@ -99,7 +99,7 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-lg dark:bg-zinc-900 p-3 pl-3 leading-none font-semibold", className)}
+      className={cn("text-lg dark:bg-background p-3 pl-3 leading-none font-semibold", className)}
       {...props}
     />
   )

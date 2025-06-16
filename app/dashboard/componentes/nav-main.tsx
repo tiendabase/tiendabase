@@ -63,7 +63,7 @@ export function NavMain({
                     key={subItem.title}>
                       <SidebarMenuSubButton asChild>
                         <Link className={
-                          subItem.url==(pathname) ? "!text-primary !border !bg-secondary shadow " : ""
+                          subItem.url==(pathname) ? "!text-primary-foreground " : ""
                         } href={subItem.url}>
                           <span>{subItem.title}
                           </span>

@@ -26,7 +26,7 @@ interface Props {
     layout?: "grid" | "list"
 }
 
-const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, layout = "grid" }: Props) => {
+const ProductoItem = ({ producto, showQuickView = true,  layout = "grid" }: Props) => {
     const dispatch = useDispatch()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isHovered, setIsHovered] = useState(false)
@@ -135,7 +135,7 @@ const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, la
                     <div className="relative w-48 h-48 flex-shrink-0">
                         <Link href={`/producto/${producto.url || producto.id}`}>
                             <Image
-                                src={mainImage?.url || "/placeholder.svg?height=200&width=200"}
+                                src={mainImage?.url ?? "https://kzmpc27qtrshb83hvou0.lite.vusercontent.net/placeholder.svg?height=200&width=200"}
                                 alt={producto.titulo}
                                 fill
                                 className="object-cover"
@@ -217,7 +217,7 @@ const ProductoItem = ({ producto, showQuickView = true, showAddToCart = true, la
                 >
                     <Link href={`/producto/${producto.url || producto.id}`}>
                         <Image
-                            src={mainImage?.url || "/placeholder.svg?height=300&width=300"}
+                            src={mainImage?.url || "https://kzmpc27qtrshb83hvou0.lite.vusercontent.net/placeholder.svg?height=300&width=300"}
                             alt={producto.titulo}
                             fill
                             className="object-cover transition-transform duration-500 group-hover:scale-105"

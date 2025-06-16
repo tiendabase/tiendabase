@@ -1,4 +1,5 @@
 import { Facebook, Twitter, Linkedin, Instagram, Youtube, Mail, Phone } from "lucide-react"
+import Image from "next/image"
 import Link from "next/link"
 
 const Footer = () => {
@@ -8,12 +9,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Descripción de la marca */}
           <div className="lg:col-span-2">
-            <h6 className="text-2xl font-bold mb-4">
-              <span className="text-primary">E</span>
-              -Shop
-            </h6>
+            <Image alt="2" src="/logo.png" width={60} height={60} className="w-17 h-17 bg-primary rounded-xl mb-4" />
             <p className="text-muted-foreground mb-6 leading-relaxed max-w-md">
-              House My Brand diseña ropa para jóvenes, adultos y todos los que están en el medio, pero lo más
+              Moces-K diseña ropa para jóvenes, adultos y todos los que están en el medio, pero lo más
               importante, para los amantes de la moda.
             </p>
             <div className="flex space-x-4">
@@ -127,7 +125,7 @@ const Footer = () => {
                     href="mailto:tienda@eshop.com"
                     className="text-muted-foreground hover:text-foreground transition-colors duration-200"
                   >
-                    tienda@eshop.com
+                    moces-k@moces.com
                   </Link>
                 </div>
                 <div className="flex items-center space-x-3">

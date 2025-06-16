@@ -88,19 +88,19 @@ const TestimonialsSection = () => {
       name: "María González",
       rating: 5,
       comment: "Excelente calidad y envío súper rápido. Definitivamente volveré a comprar.",
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "https://kzmpc27qtrshb83hvou0.lite.vusercontent.net/placeholder.svg?height=10&width=10",
     },
     {
       name: "Carlos Rodríguez",
       rating: 5,
       comment: "La mejor tienda online que he encontrado. Productos únicos y precios justos.",
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "https://kzmpc27qtrshb83hvou0.lite.vusercontent.net/placeholder.svg?height=60&width=60",
     },
     {
       name: "Ana Martínez",
       rating: 5,
       comment: "Atención al cliente excepcional. Me ayudaron a elegir la talla perfecta.",
-      avatar: "/placeholder.svg?height=60&width=60",
+      avatar: "https://kzmpc27qtrshb83hvou0.lite.vusercontent.net/placeholder.svg?height=60&width=60",
     },
   ]
 
@@ -126,7 +126,7 @@ const TestimonialsSection = () => {
                 <CardContent className="p-6">
                   <div className="flex items-center mb-4">
                     <Image
-                      src={testimonial.avatar || "/placeholder.svg"}
+                      src={testimonial.avatar || "https://kzmpc27qtrshb83hvou0.lite.vusercontent.net/placeholder.svg?width=200&height=200"}
                       alt={testimonial.name}
                       width={48}
                       height={48}
@@ -383,7 +383,7 @@ export default function Home() {
       <section className="py-16 bg-background">
         <div className="container mx-auto px-4">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">¿Por qué elegir E-Shop?</h2>
+            <h2 className="text-3xl font-bold mb-4">¿Por qué elegir Moces-K?</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Nos comprometemos a brindarte la mejor experiencia de compra online con beneficios únicos
             </p>
@@ -443,7 +443,7 @@ export default function Home() {
             {[...Array(4)].map((_, i) => (
               <div key={i} className="aspect-square relative rounded-lg overflow-hidden group cursor-pointer">
                 <Image
-                  src={`/placeholder.svg?height=200&width=200&text=Instagram+${i + 1}`}
+                  src={`https://kzmpc27qtrshb83hvou0.lite.vusercontent.net/placeholder.svg?height=200&width=200&text=Instagram+${i + 1}`}
                   alt={`Instagram post ${i + 1}`}
                   fill
                   className="object-cover transition-transform group-hover:scale-110"
