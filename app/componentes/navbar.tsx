@@ -238,7 +238,7 @@ const Navbar = () => {
                                         <Menu className="w-5 h-5" />
                                     </Button>
                                 </SheetTrigger>
-                                <SheetContent side="right" className="text-md" >
+                                <SheetContent side="right" className="text-md p-5" >
                                     <SheetHeader>
                                         <SheetTitle>Menú</SheetTitle>
                                         <SheetDescription>Navega por nuestra tienda</SheetDescription>

@@ -232,7 +232,7 @@ const ProductView = ({ producto }: ProductViewProps) => {
 
 
   return (
-    <div className="max-w-7xl mx-auto space-y-8 relative">
+    <div className="max-w-7xl mt-5 mx-auto space-y-8 relative">
       {/* Header con breadcrumb y acciones rápidas */}
       <div className="flex items-center justify-between">
         <div className="flex items-center  text-sm text-muted-foreground">

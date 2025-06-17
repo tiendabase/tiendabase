@@ -3,9 +3,9 @@ import { prisma } from "@/lib/prisma";
 import Client from "./client";
 
 interface PageProps {
-    params: {
+    params: Promise<{
         id?: string;
-    };
+    }>;
 }
 
 export default async function Page({ params }: PageProps) {

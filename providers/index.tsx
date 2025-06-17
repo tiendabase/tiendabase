@@ -1,7 +1,6 @@
 "use client";
 import * as React from "react";
 import { SessionProvider } from "next-auth/react";
-import { EdgeStoreProvider } from "./edgestore";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { makeStore } from "@/store";
