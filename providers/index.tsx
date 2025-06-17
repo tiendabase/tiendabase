@@ -24,13 +24,11 @@ export function Providers({ children }: ProvidersProps) {
 
   return (
     <SessionProvider>
-      <EdgeStoreProvider>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            {children}
-          </PersistGate>
-        </Provider>
-      </EdgeStoreProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          {children}
+        </PersistGate>
+      </Provider>
     </SessionProvider>
   );
 }
